@@ -7,6 +7,7 @@ import {
   Button,
   FormGroup,
   Col,
+  Modal,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 export default class UpdateDocument extends Component {
@@ -17,9 +18,37 @@ export default class UpdateDocument extends Component {
       isLoaded: false,
       categories: [],
       documentItem: [],
+      show: false,
     };
   }
 
+  handleSubmit(event) {
+    const indexCategory =
+      document.getElementById("category").options.selectedIndex;
+    const indexStatus = document.getElementById("status").options.selectedIndex;
+    fetch(serverUrl + "v1/docs/" + this.props.match.params.id, {
+      method: "PATCH",
+      body: JSON.stringify({
+        createTime: document.getElementById("date").value + "T15:15:46.001Z",
+        name: document.getElementById("name").value,
+        sectionId:
+          document.getElementById("category").options[indexCategory].id,
+        status: document.getElementById("status").options[indexStatus].value,
+      }),
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("accsess_token"),
+        accept: "*/*",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result.data);
+      });
+
+    this.setState({ show: true });
+    event.preventDefault();
+  }
   componentDidMount() {
     const id = this.props.match.params.id;
     fetch(serverUrl + "v1/sections/get", {
@@ -68,7 +97,7 @@ export default class UpdateDocument extends Component {
       );
   }
   render() {
-    const { error, isLoaded, categories, documentItem } = this.state;
+    const { error, isLoaded, categories, documentItem, show } = this.state;
     return (
       <Container>
         <Breadcrumb>
@@ -115,10 +144,10 @@ export default class UpdateDocument extends Component {
               Статус
             </Form.Label>
             <Col>
-              <Form.Control id="status" as="select" defaultValue="Діючий">
-                <option>Діючий</option>
-                <option>Припинений</option>
-                <option>Архівний</option>
+              <Form.Control id="status" as="select">
+                <option value="ACTIVE">Діючий</option>
+                <option value="INOPERATIVE">Припинений</option>
+                <option value="ARCHIVED">Архівний</option>
               </Form.Control>
             </Col>
           </Form.Row>
@@ -138,9 +167,23 @@ export default class UpdateDocument extends Component {
 
           <br></br>
           <Col xs="auto" className="my-1">
-            <Button type="submit">Оновити документ</Button>
+            <Button onClick={(e) => this.handleSubmit(e)} type="submit">
+              Оновити документ
+            </Button>
           </Col>
         </FormGroup>
+        <Modal
+          size="sm"
+          show={show}
+          onHide={() => this.setState({ show: false })}
+          aria-labelledby="example-modal-sizes-title-sm"
+        >
+          <Modal.Header closeButton>
+            <Modal.Title id="example-modal-sizes-title-sm">
+              Документ Змінено
+            </Modal.Title>
+          </Modal.Header>
+        </Modal>
       </Container>
     );
   }
