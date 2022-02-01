@@ -90,15 +90,7 @@ export default class Documents extends Component {
   }
 
   render() {
-    const {
-      error,
-      isLoaded,
-      documentsItem,
-      status,
-      categoryName,
-      pageNumber,
-      numPages,
-    } = this.state;
+    const { error, isLoaded, documentsItem, status, categoryName } = this.state;
     if (error) {
       return <h1>Error</h1>;
     } else if (!isLoaded) {
