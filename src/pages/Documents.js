@@ -20,13 +20,9 @@ export default class Documents extends Component {
       documentsItem: [],
       status: null,
       categoryName: null,
-      numPages: null,
-      pageNumber: 1,
     };
   }
-  onDocumentLoadSuccess({ numPages }) {
-    this.setState({ numPages: numPages });
-  }
+
   downloadFile(event) {
     window.open(serverUrl + "v1/docs/load/" + this.state.documentsItem.id);
     event.preventDefault();
@@ -174,27 +170,8 @@ export default class Documents extends Component {
                 height="600px"
                 frameborder="0"
               ></iframe>
-              <div>
-                <Document
-                  file={`serverUrl}v1/docs/load/${documentsItem.id}/pdf`}
-                  onLoadSuccess={this.onDocumentLoadSuccess}
-                >
-                  <Page pageNumber={pageNumber} />
-                </Document>
-                <p>
-                  Page {pageNumber} of {numPages}
-                </p>
-              </div>
-              <iframe
-                scrolling="yes"
-                src={`http://docs.google.com/gview?url=http://www.africau.edu/images/default/sample.pdf&embedded=true`}
-                width="100%"
-                height="600px"
-                frameborder="3"
-              ></iframe>
             </Col>
           </Row>
-          .
         </Container>
       );
     }
