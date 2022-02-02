@@ -138,7 +138,7 @@ export default class Category extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {section.documents.map((documents) => (
+                  {section.documents?.map((documents) => (
                     <tr>
                       <td>
                         <Link to={`/document/${documents.id}`}>
