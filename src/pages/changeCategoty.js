@@ -23,7 +23,7 @@ export default class changeCategoty extends Component {
   }
 
   changeeCategory(event) {
-    fetch(serverUrl + "v1/sections", {
+    fetch(serverUrl + "v1/sections/" + this.props.match.params.id, {
       method: "PATCH",
       body: JSON.stringify({
         name: document.getElementById("category").value,
