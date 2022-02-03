@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import AllPagesPDFViewer from "../components/pdf-pages";
 import {
   Col,
   Container,
@@ -8,8 +9,8 @@ import {
   Button,
 } from "react-bootstrap";
 import { serverUrl } from "../config.json";
-import { Document, Page } from "react-pdf";
 import { Link } from "react-router-dom";
+import samplePDF from "../положення1 (1).pdf";
 
 export default class Documents extends Component {
   constructor(props) {
@@ -20,6 +21,7 @@ export default class Documents extends Component {
       documentsItem: [],
       status: null,
       categoryName: null,
+      pdf: samplePDF,
     };
   }
 
@@ -90,7 +92,8 @@ export default class Documents extends Component {
   }
 
   render() {
-    const { error, isLoaded, documentsItem, status, categoryName } = this.state;
+    const { error, isLoaded, documentsItem, status, categoryName, pdf } =
+      this.state;
     if (error) {
       return <h1>Error</h1>;
     } else if (!isLoaded) {
@@ -156,6 +159,7 @@ export default class Documents extends Component {
             </Col>
             <Col sm={9}>
               <h4>{documentsItem.name}</h4>
+              <AllPagesPDFViewer pdf={pdf} />
               <iframe
                 src={`http://docs.google.com/gview?url=${serverUrl}v1/docs/load/${documentsItem.id}/pdf&embedded=true`}
                 width="100%"
