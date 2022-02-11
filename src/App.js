@@ -36,7 +36,7 @@ function App() {
     <Route
       {...rest}
       render={(props) =>
-        localStorage.getItem("accsess_token") ? ( // your auth mechanism goes here
+        localStorage.getItem("accsess_token") ? (
           <Component {...props} />
         ) : (
           <Redirect to={{ pathname: "/" }} />

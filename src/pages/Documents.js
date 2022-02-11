@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import "../App.css";
 import AllPagesPDFViewer from "../components/pdf-pages";
 import {
   Col,
@@ -10,7 +11,6 @@ import {
 } from "react-bootstrap";
 import { serverUrl } from "../config.json";
 import { Link } from "react-router-dom";
-import samplePDF from "../положення1 (1).pdf";
 
 export default class Documents extends Component {
   constructor(props) {
@@ -21,7 +21,7 @@ export default class Documents extends Component {
       documentsItem: [],
       status: null,
       categoryName: null,
-      pdf: samplePDF,
+      pdf: null,
     };
   }
 
@@ -30,6 +30,13 @@ export default class Documents extends Component {
     event.preventDefault();
   }
   componentDidMount() {
+    const checkPdf = (nameFile, id) => {
+      if (nameFile.includes("pdf") === true) {
+        this.setState({ pdf: `${serverUrl}v1/docs/load/${id}` });
+      } else {
+        this.setState({ pdf: `${serverUrl}v1/docs/load/${id}/pdf` });
+      }
+    };
     const id = this.props.match.params.id;
     fetch(serverUrl + "v1/docs/get/" + id, {
       method: "GET",
@@ -42,7 +49,7 @@ export default class Documents extends Component {
       .then(
         (result) => {
           document.title = result.data.name;
-
+          checkPdf(result.data.fileName, result.data.id);
           this.setState({
             isLoaded: true,
             documentsItem: result.data,
@@ -157,15 +164,10 @@ export default class Documents extends Component {
                 </Button>
               </Link>
             </Col>
-            <Col sm={9}>
+            <Col sm={1}></Col>
+            <Col sm={8}>
               <h4>{documentsItem.name}</h4>
               <AllPagesPDFViewer pdf={pdf} />
-              <iframe
-                src={`http://docs.google.com/gview?url=${serverUrl}v1/docs/load/${documentsItem.id}/pdf&embedded=true`}
-                width="100%"
-                height="600px"
-                frameborder="0"
-              ></iframe>
             </Col>
           </Row>
         </Container>

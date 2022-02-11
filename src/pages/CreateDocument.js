@@ -45,9 +45,7 @@ export default class CreateDocument extends Component {
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result.data);
         fetch(serverUrl + "v1/docs/" + result.data.id, {
-          //
           method: "PUT",
           body: formData,
           headers: {
