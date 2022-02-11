@@ -28,7 +28,7 @@ export default class managementCategory extends Component {
       },
     });
     this.setState({ show: false });
-
+    window.location.reload();
     event.preventDefault();
   }
 
