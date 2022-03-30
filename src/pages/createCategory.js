@@ -5,7 +5,8 @@ import {
   Row,
   Col,
   Form,
-  FormGroup,
+  InputGroup,
+  FormControl,
   Button,
   Modal,
 } from "react-bootstrap";
@@ -59,30 +60,25 @@ export default class createCategory extends Component {
           </Breadcrumb.Item>
           <Breadcrumb.Item active>Створення Категорії</Breadcrumb.Item>
         </Breadcrumb>
+        <br></br>
         <Row>
           <Col sm={4}>
             <h3>Створити Катеогорію</h3>
           </Col>
         </Row>
         <br></br>
-
-        <FormGroup name="form1">
-          <Form.Row>
-            <Form.Label>Назва Категорії</Form.Label>
-            <Form.Control
-              id="category"
-              type="text"
-              placeholder="Назвіть категорію"
-            />
-          </Form.Row>
-        </FormGroup>
-        <Row>
-          <Col sm={1}>
-            <Button variant="primary" onClick={(e) => this.handleSubmit(e)}>
-              Створити
-            </Button>
-          </Col>
-        </Row>
+        <InputGroup className="mb-3">
+          <FormControl
+            id="category"
+            type="text"
+            placeholder="Назвіть категорію"
+            aria-label="Recipient's username"
+            aria-describedby="basic-addon2"
+          />
+          <Button variant="primary" onClick={(e) => this.handleSubmit(e)}>
+            Створити
+          </Button>
+        </InputGroup>
         <Modal
           size="sm"
           show={show}

@@ -83,7 +83,6 @@ export default class managementCategory extends Component {
           <Table striped bordered hover size="sm" responsive>
             <thead>
               <tr>
-                <th>#</th>
                 <th>Назва Категорії</th>
                 <th>Дії над категоріями</th>
               </tr>
@@ -91,9 +90,10 @@ export default class managementCategory extends Component {
             <tbody>
               {items.map((items) => (
                 <tr>
-                  <td>{items.id}</td>
                   <td>
-                    <Link to={"/category/" + items.id}>{items.name}</Link>
+                    <Link className="tableLink" to={"/category/" + items.id}>
+                      {items.name}
+                    </Link>
                   </td>
                   <td>
                     <Link to={"/management/category/update/" + items.id}>

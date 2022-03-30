@@ -44,3 +44,20 @@
     transform: rotate(360deg);
   }
 }
+.link {
+  text-decoration: none;
+  color: #212529;
+}
+.listCategory {
+  text-align: left;
+}
+.table {
+  text-align: left;
+}
+.tableLink {
+  color: #0d6efd;
+  text-decoration: none;
+}
+.breadCrumbLink {
+  text-decoration: none;
+}

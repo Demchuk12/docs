@@ -119,22 +119,26 @@ export default class Documents extends Component {
             </Breadcrumb.Item>
             <Breadcrumb.Item active>Документи</Breadcrumb.Item>
           </Breadcrumb>
+          <br></br>
           <Row>
             <Col sm={3}>
-              <Table>
+              <Table className="table">
                 <tbody>
                   <tr>
                     <td>
                       <b>Назва:</b>
                     </td>
-                    <td>{documentsItem.name}</td>
+                    <td clas>{documentsItem.name}</td>
                   </tr>
                   <tr>
                     <td>
                       <b>Категорія:</b>
                     </td>
                     <td>
-                      <Link to={"/category/" + documentsItem.sectionId}>
+                      <Link
+                        className="tableLink"
+                        to={"/category/" + documentsItem.sectionId}
+                      >
                         {categoryName}
                       </Link>
                     </td>

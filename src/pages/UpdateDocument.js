@@ -5,7 +5,7 @@ import {
   Breadcrumb,
   Form,
   Button,
-  FormGroup,
+  Row,
   Col,
   Modal,
 } from "react-bootstrap";
@@ -109,69 +109,62 @@ export default class UpdateDocument extends Component {
           </Breadcrumb.Item>
           <Breadcrumb.Item active>Оновлення Документа</Breadcrumb.Item>
         </Breadcrumb>
-        <h2>Змінити документ: "{documentItem.name}"</h2>
+        <h3>Змінити документ: "{documentItem.name}"</h3>
         <br></br>
         <br></br>
-        <FormGroup>
-          <Form.Row>
+        <Row>
+          <Col sm={6}>
             <Form.Label column lg={2}>
               Назва
             </Form.Label>
-            <Col>
-              <Form.Control
-                type="text"
-                id="name"
-                placeholder="Назвіть документ"
-              />
-            </Col>
-          </Form.Row>
+            <Form.Control
+              id="name"
+              type="text"
+              placeholder="Назвіть документ"
+            />
+          </Col>
           <br />
-          <Form.Row>
+          <Col sm={6}>
             <Form.Label column lg={2}>
-              Категорія
+              Катеогорія
             </Form.Label>
-            <Col>
-              <Form.Control id="category" as="select" defaultValue="">
-                {categories.map((categories) => (
-                  <option id={categories.id}>{categories.name}</option>
-                ))}
-              </Form.Control>
-            </Col>
-          </Form.Row>
-          <br />
-          <Form.Row>
+
+            <Form.Control id="category" as="select" defaultValue="">
+              {categories.map((categories) => (
+                <option id={categories.id}>{categories.name}</option>
+              ))}
+            </Form.Control>
+          </Col>
+        </Row>
+        <br />
+        <Row>
+          <Col>
             <Form.Label column lg={2}>
               Статус
             </Form.Label>
-            <Col>
-              <Form.Control id="status" as="select">
-                <option value="ACTIVE">Діючий</option>
-                <option value="INOPERATIVE">Припинений</option>
-                <option value="ARCHIVED">Архівний</option>
-              </Form.Control>
-            </Col>
-          </Form.Row>
+
+            <Form.Control id="status" as="select">
+              <option value="ACTIVE">Діючий</option>
+              <option value="INOPERATIVE">Припинений</option>
+              <option value="ARCHIVED">Архівний</option>
+            </Form.Control>
+          </Col>
           <br />
-          <Form.Row>
+          <Col>
             <Form.Label column lg={2}>
               Дата
             </Form.Label>
-            <Col>
-              <Form.Control
-                id="date"
-                type="text"
-                placeholder="Введіть дату в форматі 2021-06-22"
-              />
-            </Col>
-          </Form.Row>
 
-          <br></br>
-          <Col xs="auto" className="my-1">
-            <Button onClick={(e) => this.handleSubmit(e)} type="submit">
-              Оновити документ
-            </Button>
+            <Form.Control id="date" type="date" />
           </Col>
-        </FormGroup>
+        </Row>
+
+        <br></br>
+        <Col xs="auto" className="my-1">
+          <Button onClick={(e) => this.handleSubmit(e)} type="submit">
+            Оновити документ
+          </Button>
+        </Col>
         <Modal
           size="sm"
           show={show}

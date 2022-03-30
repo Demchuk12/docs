@@ -5,8 +5,9 @@ import {
   Row,
   Col,
   ListGroup,
-  Form,
   Button,
+  InputGroup,
+  FormControl,
 } from "react-bootstrap";
 import { serverUrl } from "../config.json";
 import { Link } from "react-router-dom";
@@ -62,36 +63,30 @@ export default class Home extends Component {
           <Row>
             <Col sm={6}>
               <br></br>
-              <Form>
-                <Form.Group controlId="formBasicEmail">
-                  <h3>Пошук по реквізитах</h3>
-                  <Form.Control
-                    id="documentName"
-                    type="text"
-                    placeholder="Введіть реквізити"
-                  />
-                </Form.Group>
-
-                <Button
-                  onClick={this.handleSubmit}
-                  variant="primary"
-                  type="submit"
-                >
-                  Пошук
+              <h3>Пошук за реквізитами</h3>
+              <InputGroup className="mb-3">
+                <FormControl
+                  id="documentName"
+                  placeholder="Пошук"
+                  aria-label="Recipient's username"
+                  aria-describedby="basic-addon2"
+                />
+                <Button variant="primary" onClick={this.handleSubmit}>
+                  Найти
                 </Button>
-              </Form>
+              </InputGroup>
             </Col>
             <Col sm={6}>
               <br></br>
 
               <h3>Категорії</h3>
-              <ListGroup>
+              <ListGroup variant="flush">
                 {items.map((items) => (
-                  <Link to={`/category/${items.id}`}>
-                    <ListGroup.Item action id={items.id}>
+                  <ListGroup.Item className="listCategory" id={items.id}>
+                    <Link className="link" to={`/category/${items.id}`}>
                       {items.name}
-                    </ListGroup.Item>
-                  </Link>
+                    </Link>
+                  </ListGroup.Item>
                 ))}
               </ListGroup>
             </Col>

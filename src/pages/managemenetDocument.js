@@ -7,6 +7,7 @@ import {
   Modal,
   InputGroup,
   FormControl,
+  Form,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { serverUrl } from "../config.json";
@@ -17,10 +18,15 @@ export default class managemenetDocument extends Component {
     this.state = {
       error: null,
       isLoaded: false,
-      categories: [],
       show: false,
       deleteId: null,
-      findDocumnets: [],
+      categories: [],
+      documents: [],
+      findDocuments: [],
+      documentName: "",
+      category: "",
+      status: null,
+      date: null,
     };
   }
   handleClose = () => this.setState({ show: false });
@@ -41,32 +47,23 @@ export default class managemenetDocument extends Component {
     window.location.reload();
     event.preventDefault();
   }
+  handleChange(event) {
+    this.setState({ category: event.target.value });
+    this.state.findDocuments = this.state.documents.filter((documents) => {
+      return documents.category
+        .toLowerCase()
+        .includes(event.target.value.toLowerCase());
+    });
 
+    event.preventDefault();
+  }
   findDoc(event) {
-    const searchName = document.getElementById("search").value;
-    const sections = this.state.categories;
-    fetch(serverUrl + "v1/docs/find/" + searchName, {
-      method: "GET",
-      headers: {
-        accept: "*/*",
-      },
-    })
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          console.log(result.data);
-          this.setState({
-            isLoaded: true,
-            findDocuments: result.data,
-          });
-        },
-        (error) => {
-          this.setState({
-            isLoaded: true,
-            error,
-          });
-        }
-      );
+    this.setState({ documentName: event.target.value });
+    this.state.findDocuments = this.state.documents.filter((documents) => {
+      return documents.name
+        .toLowerCase()
+        .includes(event.target.value.toLowerCase());
+    });
     event.preventDefault();
   }
 
@@ -81,12 +78,31 @@ export default class managemenetDocument extends Component {
       .then((res) => res.json())
       .then(
         (result) => {
-          console.log(result.data);
+          for (let i = 0; i < result.data.length; i++) {
+            for (let j = 0; j < result.data[i].documents.length; j++) {
+              this.state.documents.push({
+                name: result.data[i].documents[j].name,
+                id: result.data[i].documents[j].id,
+                categoryId: result.data[i].id,
+                category: result.data[i].name,
+                status: result.data[i].documents[j].status,
+                createTime: result.data[i].documents[j].createTime,
+              });
+              this.state.findDocuments.push({
+                name: result.data[i].documents[j].name,
+                id: result.data[i].documents[j].id,
+                categoryId: result.data[i].id,
+                category: result.data[i].name,
+                status: result.data[i].documents[j].status,
+                createTime: result.data[i].documents[j].createTime,
+              });
+            }
+          }
           this.setState({
             isLoaded: true,
             categories: result.data,
-            findDocumnets: result.data,
           });
+          console.log(this.state.documents);
         },
         (error) => {
           this.setState({
@@ -98,7 +114,7 @@ export default class managemenetDocument extends Component {
   }
 
   render() {
-    const { error, isLoaded, categories, show, deleteId, findDocumnets } =
+    const { error, isLoaded, categories, show, deleteId, findDocuments } =
       this.state;
     return (
       <Container>
@@ -115,15 +131,7 @@ export default class managemenetDocument extends Component {
 
         <br></br>
         <br></br>
-        <InputGroup size="sm" className="mb-3">
-          <InputGroup.Prepend>
-            <InputGroup.Text id="search">Пошук</InputGroup.Text>
-          </InputGroup.Prepend>
-          <FormControl
-            aria-label="Small"
-            aria-describedby="inputGroup-sizing-sm"
-          />
-        </InputGroup>
+
         <Table striped bordered hover size="sm" responsive>
           <thead>
             <tr>
@@ -135,40 +143,80 @@ export default class managemenetDocument extends Component {
             </tr>
           </thead>
           <tbody>
-            {findDocumnets.map((categories) =>
-              categories.documents.map((documents) => (
-                <tr>
-                  <td>
-                    <Link to={`/document/${documents.id}`}>
-                      {documents.name}
-                    </Link>
-                  </td>
-                  <td>
-                    <Link to={`/category/${categories.id}`}>
+            <tr>
+              <td>
+                <Form.Control
+                  value={this.state.documentName}
+                  onChange={(e) => {
+                    this.findDoc(e);
+                  }}
+                  size="sm"
+                  type="text"
+                  placeholder="Введіть назву файлу"
+                />
+              </td>
+              <td>
+                <Form.Select
+                  size="sm"
+                  value={this.state.category}
+                  onChange={(e) => this.handleChange(e)}
+                >
+                  <option value={""}>-</option>
+                  {categories.map((categories) => (
+                    <option id={categories.id} value={categories.name}>
                       {categories.name}
-                    </Link>
-                  </td>
-                  <td>{documents.createTime.split("T")[0]}</td>
-                  <td>{documents.status}</td>
-                  <td>
-                    <Link to={"/management/document/update/" + documents.id}>
-                      <i
-                        class="fas fa-edit"
-                        style={{ fontSize: 24 + "px", color: "black" }}
-                      ></i>
-                    </Link>
-                    <> </>
-                    <Link>
-                      <i
-                        onClick={(e) => this.handleShow(e, documents.id)}
-                        class="fas fa-trash-alt"
-                        style={{ fontSize: 24 + "px", color: "black" }}
-                      ></i>
-                    </Link>
-                  </td>
-                </tr>
-              ))
-            )}
+                    </option>
+                  ))}
+                </Form.Select>
+              </td>
+              <td>
+                <Form.Control size="sm" type="date" />
+              </td>
+              <td>
+                <Form.Select size="sm">
+                  <option>-</option>
+                  <option value="ACTIVE">Діючий</option>
+                  <option value="INOPERATIVE">Припинений</option>
+                  <option value="ARCHIVED">Архівний</option>
+                </Form.Select>
+              </td>
+              <td></td>
+            </tr>
+            {findDocuments.map((findD) => (
+              <tr>
+                <td>
+                  <Link className="tableLink" to={`/document/${findD.id}`}>
+                    {findD.name}
+                  </Link>
+                </td>
+                <td>
+                  <Link
+                    className="tableLink"
+                    to={`/category/${findD.categoryId}`}
+                  >
+                    {findD.category}
+                  </Link>
+                </td>
+                <td>{findD.createTime.split("T")[0]}</td>
+                <td>{findD.status}</td>
+                <td>
+                  <Link to={"/management/document/update/" + findD.id}>
+                    <i
+                      class="fas fa-edit"
+                      style={{ fontSize: 24 + "px", color: "black" }}
+                    ></i>
+                  </Link>
+                  <> </>
+                  <Link>
+                    <i
+                      onClick={(e) => this.handleShow(e, findD.id)}
+                      class="fas fa-trash-alt"
+                      style={{ fontSize: 24 + "px", color: "black" }}
+                    ></i>
+                  </Link>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </Table>
         <Modal

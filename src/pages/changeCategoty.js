@@ -8,6 +8,8 @@ import {
   Button,
   FormGroup,
   Modal,
+  InputGroup,
+  FormControl,
 } from "react-bootstrap";
 import { serverUrl } from "../config.json";
 import { Link } from "react-router-dom";
@@ -81,25 +83,23 @@ export default class changeCategoty extends Component {
           </Breadcrumb.Item>
           <Breadcrumb.Item active>Змінити Категорію</Breadcrumb.Item>
         </Breadcrumb>
-        <h3>Зиінити Категорію: "{category.name}"</h3>
         <br></br>
-        <FormGroup name="form1">
-          <Form.Row>
-            <Form.Label>Назва Категорії</Form.Label>
-            <Form.Control
-              id="category"
-              type="text"
-              placeholder="Назвіть категорію"
-            />
-          </Form.Row>
-        </FormGroup>
-        <Row>
-          <Col sm={1}>
-            <Button variant="primary" onClick={(e) => this.changeeCategory(e)}>
-              Змінити
-            </Button>
-          </Col>
-        </Row>
+        <h3>Змінити Категорію: "{category.name}"</h3>
+        <br></br>
+        <br></br>
+        <InputGroup className="mb-3">
+          <FormControl
+            id="category"
+            type="text"
+            placeholder="Назвіть категорію"
+            aria-label="Recipient's username"
+            aria-describedby="basic-addon2"
+          />
+          <Button variant="primary" onClick={(e) => this.changeeCategory(e)}>
+            Змінити
+          </Button>
+        </InputGroup>
+
         <Modal
           size="sm"
           show={show}

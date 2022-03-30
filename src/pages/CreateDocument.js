@@ -7,6 +7,7 @@ import {
   FormGroup,
   Col,
   Modal,
+  Row,
 } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { serverUrl } from "../config.json";
@@ -27,6 +28,7 @@ export default class CreateDocument extends Component {
     const indexStatus = document.getElementById("status").options.selectedIndex;
     const uploadFile = document.getElementById("uploadFile");
     const formData = new FormData();
+    console.log(document.getElementById("date").value);
     formData.append("file", uploadFile.files[0]);
     fetch(serverUrl + "v1/docs", {
       method: "POST",
@@ -103,72 +105,65 @@ export default class CreateDocument extends Component {
           </Breadcrumb.Item>
           <Breadcrumb.Item active>Створення Документа</Breadcrumb.Item>
         </Breadcrumb>
-        <h2>Створення документа</h2>
+        <h3>Створення документа</h3>
         <br></br>
         <br></br>
-        <FormGroup>
-          <Form.Row>
+        <Row>
+          <Col sm={6}>
             <Form.Label column lg={2}>
               Назва
             </Form.Label>
-            <Col>
-              <Form.Control
-                id="name"
-                type="text"
-                placeholder="Назвіть документ"
-              />
-            </Col>
-          </Form.Row>
+            <Form.Control
+              id="name"
+              type="text"
+              placeholder="Назвіть документ"
+            />
+          </Col>
           <br />
-
-          <Form.Row>
+          <Col sm={6}>
             <Form.Label column lg={2}>
               Катеогорія
             </Form.Label>
-            <Col>
-              <Form.Control id="category" as="select" defaultValue="">
-                {categorys.map((categorys) => (
-                  <option id={categorys.id}>{categorys.name}</option>
-                ))}
-              </Form.Control>
-            </Col>
-          </Form.Row>
-          <br />
 
-          <Form.Row>
+            <Form.Control id="category" as="select" defaultValue="">
+              {categorys.map((categorys) => (
+                <option id={categorys.id}>{categorys.name}</option>
+              ))}
+            </Form.Control>
+          </Col>
+        </Row>
+        <br />
+        <Row>
+          <Col>
             <Form.Label column lg={2}>
               Статус
             </Form.Label>
-            <Col>
-              <Form.Control id="status" as="select">
-                <option value="ACTIVE">Діючий</option>
-                <option value="INOPERATIVE">Припинений</option>
-                <option value="ARCHIVED">Архівний</option>
-              </Form.Control>
-            </Col>
-          </Form.Row>
+
+            <Form.Control id="status" as="select">
+              <option value="ACTIVE">Діючий</option>
+              <option value="INOPERATIVE">Припинений</option>
+              <option value="ARCHIVED">Архівний</option>
+            </Form.Control>
+          </Col>
           <br />
-          <Form.Row>
+          <Col>
             <Form.Label column lg={2}>
               Дата
             </Form.Label>
-            <Col>
-              <Form.Control
-                id="date"
-                type="text"
-                placeholder="Введіть дату в форматі 2021-06-22"
-              />
-            </Col>
-          </Form.Row>
-          <br></br>
-          <input type="file" id="uploadFile"></input>
-          <br></br>
-          <Col xs="auto" className="my-1">
-            <Button onClick={(e) => this.handleSubmit(e)} type="submit">
-              Створити документ
-            </Button>
+
+            <Form.Control id="date" type="date" />
           </Col>
-        </FormGroup>
+        </Row>
+        <br></br>
+        <Form.Label>Вибрати файл</Form.Label>
+        <Form.Control type="file" id="uploadFile" />
+        <br></br>
+        <Col xs="auto" className="my-1">
+          <Button onClick={(e) => this.handleSubmit(e)} type="submit">
+            Створити документ
+          </Button>
+        </Col>
+
         <Modal
           size="sm"
           show={show}
