@@ -22,24 +22,26 @@ export default class createCategory extends Component {
   }
 
   handleSubmit(event) {
-    fetch(serverUrl + "v1/sections", {
-      method: "POST",
-      body: JSON.stringify({
-        name: document.getElementById("category").value,
-      }),
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("accsess_token"),
-        accept: "*/*",
-        "Content-Type": "application/json",
-      },
-    }).then(function (response) {
-      if (response.status !== 200) {
-        alert(response.status);
-      } else {
-        document.getElementById("category").value = "";
-      }
-    });
-    this.setState({ show: true });
+    if (document.getElementById("category").value !== "") {
+      fetch(serverUrl + "v1/sections", {
+        method: "POST",
+        body: JSON.stringify({
+          name: document.getElementById("category").value,
+        }),
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("accsess_token"),
+          accept: "*/*",
+          "Content-Type": "application/json",
+        },
+      }).then(function (response) {
+        if (response.status !== 200) {
+          alert(response.status);
+        } else {
+          document.getElementById("category").value = "";
+        }
+      });
+      this.setState({ show: true });
+    }
 
     event.preventDefault();
   }
@@ -69,6 +71,7 @@ export default class createCategory extends Component {
         <br></br>
         <InputGroup className="mb-3">
           <FormControl
+            required
             id="category"
             type="text"
             placeholder="Назвіть категорію"

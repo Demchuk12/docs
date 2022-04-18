@@ -25,24 +25,27 @@ export default class changeCategoty extends Component {
   }
 
   changeeCategory(event) {
-    fetch(serverUrl + "v1/sections/" + this.props.match.params.id, {
-      method: "PATCH",
-      body: JSON.stringify({
-        name: document.getElementById("category").value,
-      }),
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("accsess_token"),
-        accept: "*/*",
-        "Content-Type": "application/json",
-      },
-    }).then(function (response) {
-      if (response.status !== 200) {
-        alert(response.status);
-      } else {
-        document.getElementById("category").value = "";
-      }
-    });
-    this.setState({ show: true });
+    if (document.getElementById("category").value !== "") {
+      fetch(serverUrl + "v1/sections/" + this.props.match.params.id, {
+        method: "PATCH",
+        body: JSON.stringify({
+          name: document.getElementById("category").value,
+        }),
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("accsess_token"),
+          accept: "*/*",
+          "Content-Type": "application/json",
+        },
+      }).then(function (response) {
+        if (response.status !== 200) {
+          alert(response.status);
+        } else {
+          document.getElementById("category").value = "";
+        }
+      });
+      this.setState({ show: true });
+    }
+
     event.preventDefault();
   }
 

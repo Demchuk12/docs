@@ -19,6 +19,9 @@ export default class CreateDocument extends Component {
       isLoaded: false,
       categorys: [],
       show: false,
+      documentName: "",
+      date: null,
+      file: null,
     };
   }
 
@@ -29,41 +32,50 @@ export default class CreateDocument extends Component {
     const uploadFile = document.getElementById("uploadFile");
     const formData = new FormData();
     console.log(document.getElementById("date").value);
+    console.log(formData);
     formData.append("file", uploadFile.files[0]);
-    fetch(serverUrl + "v1/docs", {
-      method: "POST",
-      body: JSON.stringify({
-        createTime: document.getElementById("date").value + "T15:15:46.001Z",
-        name: document.getElementById("name").value,
-        sectionId:
-          document.getElementById("category").options[indexCategory].id,
-        status: document.getElementById("status").options[indexStatus].value,
-      }),
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("accsess_token"),
-        accept: "*/*",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        fetch(serverUrl + "v1/docs/" + result.data.id, {
-          method: "PUT",
-          body: formData,
-          headers: {
-            Authorization: "Bearer " + localStorage.getItem("accsess_token"),
-            accept: "*/*",
-          },
-        }).then(function (res) {
-          if (res.status !== 200) {
-            alert(res.status);
-          } else {
-            document.getElementById("name").value = "";
-          }
+    console.log(uploadFile.files[0]);
+    if (
+      document.getElementById("name").value !== "" &&
+      document.getElementById("date").value !== "" &&
+      uploadFile.files[0] !== undefined
+    ) {
+      fetch(serverUrl + "v1/docs", {
+        method: "POST",
+        body: JSON.stringify({
+          createTime: document.getElementById("date").value + "T15:15:46.001Z",
+          name: document.getElementById("name").value,
+          sectionId:
+            document.getElementById("category").options[indexCategory].id,
+          status: document.getElementById("status").options[indexStatus].value,
+        }),
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("accsess_token"),
+          accept: "*/*",
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          fetch(serverUrl + "v1/docs/" + result.data.id, {
+            method: "PUT",
+            body: formData,
+            headers: {
+              Authorization: "Bearer " + localStorage.getItem("accsess_token"),
+              accept: "*/*",
+            },
+          }).then(function (res) {
+            if (res.status !== 200) {
+              alert(res.status);
+            } else {
+              document.getElementById("name").value = "";
+            }
+          });
         });
-      });
 
-    this.setState({ show: true });
+      this.setState({ show: true });
+    }
+
     event.preventDefault();
   }
 

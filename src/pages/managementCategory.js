@@ -43,7 +43,6 @@ export default class managementCategory extends Component {
       .then((res) => res.json())
       .then(
         (result) => {
-          console.log(result.data);
           this.setState({
             isLoaded: true,
             items: result.data,

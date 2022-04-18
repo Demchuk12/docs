@@ -37,7 +37,6 @@ export default class Home extends Component {
       .then((res) => res.json())
       .then(
         (result) => {
-          console.log(result.data);
           this.setState({
             isLoaded: true,
             items: result.data,

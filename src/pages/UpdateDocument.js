@@ -26,27 +26,33 @@ export default class UpdateDocument extends Component {
     const indexCategory =
       document.getElementById("category").options.selectedIndex;
     const indexStatus = document.getElementById("status").options.selectedIndex;
-    fetch(serverUrl + "v1/docs/" + this.props.match.params.id, {
-      method: "PATCH",
-      body: JSON.stringify({
-        createTime: document.getElementById("date").value + "T15:15:46.001Z",
-        name: document.getElementById("name").value,
-        sectionId:
-          document.getElementById("category").options[indexCategory].id,
-        status: document.getElementById("status").options[indexStatus].value,
-      }),
-      headers: {
-        Authorization: "Bearer " + localStorage.getItem("accsess_token"),
-        accept: "*/*",
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((result) => {
-        console.log(result.data);
-      });
+    if (
+      document.getElementById("name").value !== "" &&
+      document.getElementById("date").value !== ""
+    ) {
+      fetch(serverUrl + "v1/docs/" + this.props.match.params.id, {
+        method: "PATCH",
+        body: JSON.stringify({
+          createTime: document.getElementById("date").value + "T15:15:46.001Z",
+          name: document.getElementById("name").value,
+          sectionId:
+            document.getElementById("category").options[indexCategory].id,
+          status: document.getElementById("status").options[indexStatus].value,
+        }),
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("accsess_token"),
+          accept: "*/*",
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          console.log(result.data);
+        });
 
-    this.setState({ show: true });
+      this.setState({ show: true });
+    }
+
     event.preventDefault();
   }
   componentDidMount() {
