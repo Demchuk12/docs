@@ -51,6 +51,7 @@ export default class UpdateDocument extends Component {
         });
 
       this.setState({ show: true });
+      setTimeout(() => this.setState({ show: false }), 4000);
     }
 
     event.preventDefault();

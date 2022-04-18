@@ -31,8 +31,6 @@ export default class CreateDocument extends Component {
     const indexStatus = document.getElementById("status").options.selectedIndex;
     const uploadFile = document.getElementById("uploadFile");
     const formData = new FormData();
-    console.log(document.getElementById("date").value);
-    console.log(formData);
     formData.append("file", uploadFile.files[0]);
     console.log(uploadFile.files[0]);
     if (
@@ -74,6 +72,7 @@ export default class CreateDocument extends Component {
         });
 
       this.setState({ show: true });
+      setTimeout(() => this.setState({ show: false }), 4000);
     }
 
     event.preventDefault();
