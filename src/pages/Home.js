@@ -21,10 +21,16 @@ export default class Home extends Component {
     };
   }
 
-  handleSubmit(event) {
+  handleSubmit() {
     document.location.href =
       "/search/" + document.getElementById("documentName").value;
-    event.preventDefault();
+  }
+  enter(event) {
+    if (event.code === "Enter") {
+      event.preventDefault();
+      document.location.href =
+        "/search/" + document.getElementById("documentName").value;
+    }
   }
 
   componentDidMount() {
@@ -69,9 +75,12 @@ export default class Home extends Component {
                   placeholder="Пошук"
                   aria-label="Recipient's username"
                   aria-describedby="basic-addon2"
+                  onKeyDown={(e) => {
+                    this.enter(e);
+                  }}
                 />
                 <Button variant="primary" onClick={this.handleSubmit}>
-                  Найти
+                  Шукати
                 </Button>
               </InputGroup>
             </Col>

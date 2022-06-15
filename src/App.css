@@ -61,3 +61,6 @@
 .breadCrumbLink {
   text-decoration: none;
 }
+.input-left{
+  float: left;
+}

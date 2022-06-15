@@ -88,7 +88,7 @@ export default class changeCategoty extends Component {
           <Breadcrumb.Item active>Змінити Категорію</Breadcrumb.Item>
         </Breadcrumb>
         <br></br>
-        <h3>Змінити Категорію: "{category.name}"</h3>
+        <h3 className="input-left">Змінити Категорію: "{category.name}"</h3>
         <br></br>
         <br></br>
         <InputGroup className="mb-3">
@@ -98,6 +98,7 @@ export default class changeCategoty extends Component {
             placeholder="Назвіть категорію"
             aria-label="Recipient's username"
             aria-describedby="basic-addon2"
+            value={category.name}
           />
           <Button variant="primary" onClick={(e) => this.changeeCategory(e)}>
             Змінити

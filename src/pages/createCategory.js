@@ -41,6 +41,7 @@ export default class createCategory extends Component {
         }
       });
       this.setState({ show: true });
+      window.location = "/management/category";
       setTimeout(() => this.setState({ show: false }), 4000);
     }
 
@@ -66,7 +67,7 @@ export default class createCategory extends Component {
         <br></br>
         <Row>
           <Col sm={4}>
-            <h3>Створити Катеогорію</h3>
+            <h3 className="input-left">Створення категорії </h3>
           </Col>
         </Row>
         <br></br>

@@ -18,6 +18,7 @@ export default class UpdateDocument extends Component {
       isLoaded: false,
       categories: [],
       documentItem: [],
+      date: null,
       show: false,
     };
   }
@@ -46,9 +47,7 @@ export default class UpdateDocument extends Component {
         },
       })
         .then((res) => res.json())
-        .then((result) => {
-          console.log(result.data);
-        });
+        .then((result) => {});
 
       this.setState({ show: true });
       setTimeout(() => this.setState({ show: false }), 4000);
@@ -82,9 +81,11 @@ export default class UpdateDocument extends Component {
             .then((res) => res.json())
             .then(
               (result) => {
+                console.log(result.data);
                 this.setState({
                   isLoaded: true,
                   documentItem: result.data,
+                  date: result.data.createTime.split("T")[0],
                 });
               },
               (error) => {
@@ -103,6 +104,14 @@ export default class UpdateDocument extends Component {
         }
       );
   }
+  componentDidUpdate() {
+    document.getElementById("date").value = this.state.date;
+  }
+
+  time() {
+    return this.state.documentItem.createTime.split("T")[0];
+  }
+
   render() {
     const { error, isLoaded, categories, documentItem, show } = this.state;
     return (
@@ -116,23 +125,24 @@ export default class UpdateDocument extends Component {
           </Breadcrumb.Item>
           <Breadcrumb.Item active>Оновлення Документа</Breadcrumb.Item>
         </Breadcrumb>
-        <h3>Змінити документ: "{documentItem.name}"</h3>
+        <h3 className="input-left">Змінити документ: "{documentItem.name}"</h3>
         <br></br>
         <br></br>
         <Row>
           <Col sm={6}>
-            <Form.Label column lg={2}>
+            <Form.Label className="input-left" column lg={2}>
               Назва
             </Form.Label>
             <Form.Control
               id="name"
               type="text"
               placeholder="Назвіть документ"
+              value={documentItem.name}
             />
           </Col>
           <br />
           <Col sm={6}>
-            <Form.Label column lg={2}>
+            <Form.Label className="input-left" column lg={2}>
               Катеогорія
             </Form.Label>
 
@@ -146,7 +156,7 @@ export default class UpdateDocument extends Component {
         <br />
         <Row>
           <Col>
-            <Form.Label column lg={2}>
+            <Form.Label className="input-left" column lg={2}>
               Статус
             </Form.Label>
 
@@ -158,7 +168,7 @@ export default class UpdateDocument extends Component {
           </Col>
           <br />
           <Col>
-            <Form.Label column lg={2}>
+            <Form.Label className="input-left" column lg={2}>
               Дата
             </Form.Label>
 

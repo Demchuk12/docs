@@ -72,7 +72,7 @@ export default class CreateDocument extends Component {
         });
 
       this.setState({ show: true });
-      setTimeout(() => this.setState({ show: false }), 4000);
+      setTimeout(() => this.setState({ show: false }), 3000);
     }
 
     event.preventDefault();
@@ -101,6 +101,20 @@ export default class CreateDocument extends Component {
           });
         }
       );
+    document.getElementById("date").valueAsDate = new Date();
+  }
+  today() {
+    let d = new Date();
+    let currDate = d.getDate();
+    let currMonth = d.getMonth() + 1;
+    let currYear = d.getFullYear();
+    return (
+      currYear +
+      "-" +
+      (currMonth < 10 ? "0" + currMonth : currMonth) +
+      "-" +
+      (currDate < 10 ? "0" + currDate : currDate)
+    );
   }
   render() {
     const { error, isLoaded, categorys, show } = this.state;
@@ -116,12 +130,12 @@ export default class CreateDocument extends Component {
           </Breadcrumb.Item>
           <Breadcrumb.Item active>Створення Документа</Breadcrumb.Item>
         </Breadcrumb>
-        <h3>Створення документа</h3>
+        <h3 className="input-left">Створення документа</h3>
         <br></br>
         <br></br>
         <Row>
           <Col sm={6}>
-            <Form.Label column lg={2}>
+            <Form.Label className="input-left" column lg={2}>
               Назва
             </Form.Label>
             <Form.Control
@@ -132,7 +146,7 @@ export default class CreateDocument extends Component {
           </Col>
           <br />
           <Col sm={6}>
-            <Form.Label column lg={2}>
+            <Form.Label className="input-left" column lg={2}>
               Катеогорія
             </Form.Label>
 
@@ -146,7 +160,7 @@ export default class CreateDocument extends Component {
         <br />
         <Row>
           <Col>
-            <Form.Label column lg={2}>
+            <Form.Label className="input-left" column lg={2}>
               Статус
             </Form.Label>
 
@@ -158,11 +172,11 @@ export default class CreateDocument extends Component {
           </Col>
           <br />
           <Col>
-            <Form.Label column lg={2}>
+            <Form.Label className="input-left" column lg={2}>
               Дата
             </Form.Label>
 
-            <Form.Control id="date" type="date" />
+            <Form.Control id="date" type="date" value={this.state.date} />
           </Col>
         </Row>
         <br></br>

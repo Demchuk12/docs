@@ -1,18 +1,29 @@
 import React, { Component } from "react";
-import { Container, Row, Col, Form, Button, Breadcrumb } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  Form,
+  Button,
+  Breadcrumb,
+  Modal,
+  InputGroup,
+} from "react-bootstrap";
 import axios from "axios";
 import { serverUrl } from "../config.json";
 import { Link } from "react-router-dom";
+import { toBeRequired } from "@testing-library/jest-dom/dist/matchers";
 export default class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: "",
       password: "",
-      formErrors: { email: "", password: "" },
-      emailValid: false,
-      passwordValid: false,
-      formValid: false,
+      emailDirty: false,
+      passwordDirty: false,
+      emailError: "Пошта не може бути пуста",
+      passwordError: "Пароль може бути пустим",
+      show: false,
     };
   }
 
@@ -21,22 +32,41 @@ export default class Login extends Component {
     const value = e.target.value;
     this.setState({ [name]: value });
   };
-
+  handleClose = () => this.setState({ show: false });
+  handleShow = () => this.setState({ show: true });
+  blurHandler(e) {
+    // eslint-disable-next-line default-case
+    switch (e.target.name) {
+      case "email":
+        this.setState({ emailDirty: true });
+        break;
+      case "password":
+        this.setState({ passwordDirty: true });
+        break;
+    }
+  }
   handleSubmit(event) {
+    if (this.state.email.length === 0) {
+    }
+    if (this.state.password.length === 0) {
+    }
+    let checkError = false;
+    this.setState({ show: true });
+
     axios
       .post(serverUrl + "v1/auth/login", {
-        password: document.forms.auth.elements.password.value,
-        email: document.forms.auth.elements.login.value,
+        password: this.state.password,
+        email: this.state.email,
       })
       .then(function (response) {
         localStorage.setItem("accsess_token", response.data.accessToken);
         localStorage.setItem("refresh_token", response.data.refreshTokrn);
-        document.location.href = "/";
+        document.location.href = "/management/document";
       })
       .catch(function (error) {
-        alert("Невірний логін або пароль");
+        checkError = true;
       });
-
+    this.setState({ show: checkError });
     event.preventDefault();
   }
 
@@ -45,6 +75,8 @@ export default class Login extends Component {
   }
 
   render() {
+    const { emailDirty, passwordDirty, emailError, passwordError, show } =
+      this.state;
     return (
       <>
         <Container>
@@ -60,7 +92,10 @@ export default class Login extends Component {
                 <Form.Group controlId="formBasicEmail">
                   <Form.Label>Електронна адреса</Form.Label>
                   <Form.Control
-                    name="login"
+                    onBlur={(e) => this.blurHandler(e)}
+                    value={this.state.email}
+                    onChange={this.handleUserInput}
+                    name="email"
                     type="email"
                     placeholder="Введіть електронну адресу"
                   />
@@ -69,11 +104,16 @@ export default class Login extends Component {
                 <Form.Group controlId="formBasicPassword">
                   <Form.Label>Пароль</Form.Label>
                   <Form.Control
+                    onBlur={(e) => this.blurHandler(e)}
+                    onChange={this.handleUserInput}
+                    value={this.state.password}
                     name="password"
                     type="password"
                     placeholder="Введіть пароль"
                   />
+                  {passwordDirty && passwordError && { passwordError }}
                 </Form.Group>
+
                 <Link to={"/"}>
                   <Button
                     variant="primary"
@@ -87,6 +127,21 @@ export default class Login extends Component {
             </Col>
           </Row>
         </Container>
+
+        <Modal show={show} onHide={this.handleClose} animation={false}>
+          <Modal.Header closeButton>
+            <Modal.Title>Modal heading</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.handleClose}>
+              Close
+            </Button>
+            <Button variant="primary" onClick={this.handleClose}>
+              Save Changes
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </>
     );
   }
