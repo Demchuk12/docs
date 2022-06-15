@@ -21,30 +21,36 @@ export default class Login extends Component {
       password: "",
       emailDirty: false,
       passwordDirty: false,
-      emailError: "Пошта не може бути пуста",
-      passwordError: "Пароль може бути пустим",
       show: false,
+      isEmptyEmail: true,
+      isEmptyPassword: true,
     };
   }
-
-  handleUserInput = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    this.setState({ [name]: value });
-  };
-  handleClose = () => this.setState({ show: false });
-  handleShow = () => this.setState({ show: true });
-  blurHandler(e) {
-    // eslint-disable-next-line default-case
-    switch (e.target.name) {
-      case "email":
-        this.setState({ emailDirty: true });
-        break;
-      case "password":
-        this.setState({ passwordDirty: true });
-        break;
+  emailHandle(e) {
+    this.state.email = e.target.value;
+    this.setState({});
+    if (this.state.email.length !== 0) {
+      this.setState({ isEmptyEmail: false });
+      document.getElementById("email").className = "form-control";
+    } else {
+      this.setState({ isEmptyEmail: true });
+      document.getElementById("email").className = "form-control is-invalid";
     }
   }
+  passwordHandle(e) {
+    this.state.password = e.target.value;
+    this.setState({});
+    if (this.state.password.length !== 0) {
+      this.setState({ isEmptyPassword: false });
+      document.getElementById("password").className = "form-control";
+    } else {
+      this.setState({ isEmptyPassword: true });
+    }
+  }
+
+  handleClose = () => this.setState({ show: false });
+  handleShow = () => this.setState({ show: true });
+
   handleSubmit(event) {
     if (this.state.email.length === 0) {
     }
@@ -92,27 +98,33 @@ export default class Login extends Component {
                 <Form.Group controlId="formBasicEmail">
                   <Form.Label>Електронна адреса</Form.Label>
                   <Form.Control
-                    onBlur={(e) => this.blurHandler(e)}
                     value={this.state.email}
-                    onChange={this.handleUserInput}
+                    onChange={(e) => this.emailHandle(e)}
                     name="email"
                     type="email"
+                    id="email"
                     placeholder="Введіть електронну адресу"
                   />
+                  <Form.Control.Feedback type="invalid">
+                    Це поле не може бути пустим{" "}
+                  </Form.Control.Feedback>
                 </Form.Group>
 
                 <Form.Group controlId="formBasicPassword">
                   <Form.Label>Пароль</Form.Label>
                   <Form.Control
-                    onBlur={(e) => this.blurHandler(e)}
-                    onChange={this.handleUserInput}
+                    onChange={(e) => this.passwordHandle(e)}
                     value={this.state.password}
                     name="password"
                     type="password"
+                    id="password"
                     placeholder="Введіть пароль"
                   />
-                  {passwordDirty && passwordError && { passwordError }}
+                  <Form.Control.Feedback type="invalid">
+                    Це поле не може бути пустим
+                  </Form.Control.Feedback>
                 </Form.Group>
+                <br></br>
 
                 <Link to={"/"}>
                   <Button
