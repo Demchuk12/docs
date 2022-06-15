@@ -19,8 +19,21 @@ export default class UpdateDocument extends Component {
       categories: [],
       documentItem: [],
       date: null,
+      documentName: "",
       show: false,
+      isEmptyName: false,
     };
+  }
+  nameHandle(e) {
+    this.state.documentName = e.target.value;
+    this.setState({});
+    if (this.state.documentName.length !== 0) {
+      this.setState({ isEmptyName: false });
+      document.getElementById("name").className = "form-control";
+    } else {
+      this.setState({ isEmptyName: true });
+      document.getElementById("name").className = "form-control is-invalid";
+    }
   }
 
   handleSubmit(event) {
@@ -86,6 +99,7 @@ export default class UpdateDocument extends Component {
                   isLoaded: true,
                   documentItem: result.data,
                   date: result.data.createTime.split("T")[0],
+                  documentName: result.data.name,
                 });
               },
               (error) => {
@@ -113,7 +127,8 @@ export default class UpdateDocument extends Component {
   }
 
   render() {
-    const { error, isLoaded, categories, documentItem, show } = this.state;
+    const { error, isLoaded, categories, documentItem, show, isEmptyName } =
+      this.state;
     return (
       <Container>
         <Breadcrumb>
@@ -134,11 +149,19 @@ export default class UpdateDocument extends Component {
               Назва
             </Form.Label>
             <Form.Control
+              onChange={(e) => {
+                this.nameHandle(e);
+              }}
               id="name"
+              value={this.state.documentName}
               type="text"
               placeholder="Назвіть документ"
-              value={documentItem.name}
             />
+            {isEmptyName && (
+              <Form.Control.Feedback type="invalid">
+                Заповніть поле
+              </Form.Control.Feedback>
+            )}
           </Col>
           <br />
           <Col sm={6}>

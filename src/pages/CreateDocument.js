@@ -22,9 +22,20 @@ export default class CreateDocument extends Component {
       documentName: "",
       date: null,
       file: null,
+      isEmptyName: true,
     };
   }
-
+  nameHandle(e) {
+    this.state.documentName = e.target.value;
+    this.setState({});
+    if (this.state.documentName.length !== 0) {
+      this.setState({ isEmptyName: false });
+      document.getElementById("name").className = "form-control";
+    } else {
+      this.setState({ isEmptyName: true });
+      document.getElementById("name").className = "form-control is-invalid";
+    }
+  }
   handleSubmit(event) {
     const indexCategory =
       document.getElementById("category").options.selectedIndex;
@@ -117,7 +128,7 @@ export default class CreateDocument extends Component {
     );
   }
   render() {
-    const { error, isLoaded, categorys, show } = this.state;
+    const { error, isLoaded, categorys, show, isEmptyName } = this.state;
 
     return (
       <Container>
@@ -139,10 +150,19 @@ export default class CreateDocument extends Component {
               Назва
             </Form.Label>
             <Form.Control
+              onChange={(e) => {
+                this.nameHandle(e);
+              }}
+              value={this.state.documentName}
               id="name"
               type="text"
               placeholder="Назвіть документ"
             />
+            {isEmptyName && (
+              <Form.Control.Feedback type="invalid">
+                Заповніть поле
+              </Form.Control.Feedback>
+            )}
           </Col>
           <br />
           <Col sm={6}>
