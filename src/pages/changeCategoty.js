@@ -21,9 +21,20 @@ export default class changeCategoty extends Component {
       isLoaded: false,
       category: [],
       show: false,
+      categoryName: "",
     };
   }
-
+  nameHandle(e) {
+    this.state.categoryName = e.target.value;
+    this.setState({});
+    if (this.state.categoryName.length !== 0) {
+      this.setState({ isEmptyName: false });
+      document.getElementById("name").className = "form-control";
+    } else {
+      this.setState({ isEmptyName: true });
+      document.getElementById("name").className = "form-control is-invalid";
+    }
+  }
   changeeCategory(event) {
     if (document.getElementById("category").value !== "") {
       fetch(serverUrl + "v1/sections/" + this.props.match.params.id, {
@@ -65,7 +76,9 @@ export default class changeCategoty extends Component {
           this.setState({
             isLoaded: true,
             category: result.data,
+            categoryName: result.data.name,
           });
+          console.log(result.data);
         },
         (error) => {
           this.setState({
@@ -91,19 +104,31 @@ export default class changeCategoty extends Component {
         <h3 className="input-left">Змінити Категорію: "{category.name}"</h3>
         <br></br>
         <br></br>
-        <InputGroup className="mb-3">
-          <FormControl
-            id="category"
-            type="text"
-            placeholder="Назвіть категорію"
-            aria-label="Recipient's username"
-            aria-describedby="basic-addon2"
-            value={category.name}
-          />
-          <Button variant="primary" onClick={(e) => this.changeeCategory(e)}>
-            Змінити
-          </Button>
-        </InputGroup>
+        <Row>
+          <Col sm={11}>
+            <InputGroup className="mb-3">
+              <FormControl
+                id="name"
+                type="text"
+                placeholder="Назвіть категорію"
+                aria-label="Recipient's username"
+                aria-describedby="basic-addon2"
+                value={this.state.categoryName}
+                onChange={(e) => {
+                  this.nameHandle(e);
+                }}
+              />
+              <Form.Control.Feedback type="invalid">
+                Заповніть поле
+              </Form.Control.Feedback>
+            </InputGroup>
+          </Col>
+          <Col sm={1}>
+            <Button variant="primary" onClick={(e) => this.changeeCategory(e)}>
+              Змінити
+            </Button>
+          </Col>
+        </Row>
 
         <Modal
           size="sm"

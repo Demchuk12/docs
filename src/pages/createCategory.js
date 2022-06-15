@@ -18,15 +18,27 @@ export default class createCategory extends Component {
     super(props);
     this.state = {
       show: false,
+      categoryName: "",
+      isEmptyName: true,
     };
   }
-
+  nameHandle(e) {
+    this.state.categoryName = e.target.value;
+    this.setState({});
+    if (this.state.categoryName.length !== 0) {
+      this.setState({ isEmptyName: false });
+      document.getElementById("name").className = "form-control";
+    } else {
+      this.setState({ isEmptyName: true });
+      document.getElementById("name").className = "form-control is-invalid";
+    }
+  }
   handleSubmit(event) {
-    if (document.getElementById("category").value !== "") {
+    if (document.getElementById("name").value !== "") {
       fetch(serverUrl + "v1/sections", {
         method: "POST",
         body: JSON.stringify({
-          name: document.getElementById("category").value,
+          name: document.getElementById("name").value,
         }),
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accsess_token"),
@@ -37,7 +49,7 @@ export default class createCategory extends Component {
         if (response.status !== 200) {
           alert(response.status);
         } else {
-          document.getElementById("category").value = "";
+          document.getElementById("name").value = "";
         }
       });
       this.setState({ show: true });
@@ -52,7 +64,7 @@ export default class createCategory extends Component {
   }
 
   render() {
-    const { show } = this.state;
+    const { show, isEmptyName } = this.state;
     return (
       <Container>
         <Breadcrumb>
@@ -71,19 +83,31 @@ export default class createCategory extends Component {
           </Col>
         </Row>
         <br></br>
-        <InputGroup className="mb-3">
-          <FormControl
-            required
-            id="category"
-            type="text"
-            placeholder="Назвіть категорію"
-            aria-label="Recipient's username"
-            aria-describedby="basic-addon2"
-          />
-          <Button variant="primary" onClick={(e) => this.handleSubmit(e)}>
-            Створити
-          </Button>
-        </InputGroup>
+        <Row>
+          <Col sm={11}>
+            <InputGroup className="mb-3">
+              <FormControl
+                required
+                id="name"
+                onChange={(e) => {
+                  this.nameHandle(e);
+                }}
+                type="text"
+                placeholder="Назвіть категорію"
+                aria-label="Recipient's username"
+                aria-describedby="basic-addon2"
+              />
+              <Form.Control.Feedback type="invalid">
+                Заповніть поле
+              </Form.Control.Feedback>
+            </InputGroup>
+          </Col>{" "}
+          <Col sm={1}>
+            <Button variant="primary" onClick={(e) => this.handleSubmit(e)}>
+              Створити
+            </Button>
+          </Col>
+        </Row>
         <Modal
           size="sm"
           show={show}
