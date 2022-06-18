@@ -26,7 +26,7 @@ export default class Home extends Component {
       "/search/" + document.getElementById("documentName").value;
   }
   enter(event) {
-    if (event.code === "Enter") {
+    if (event.key == "Enter") {
       event.preventDefault();
       document.location.href =
         "/search/" + document.getElementById("documentName").value;

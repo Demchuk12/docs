@@ -29,10 +29,10 @@ export default class changeCategoty extends Component {
     this.setState({});
     if (this.state.categoryName.length !== 0) {
       this.setState({ isEmptyName: false });
-      document.getElementById("name").className = "form-control";
+      document.getElementById("category").className = "form-control";
     } else {
       this.setState({ isEmptyName: true });
-      document.getElementById("name").className = "form-control is-invalid";
+      document.getElementById("category").className = "form-control is-invalid";
     }
   }
   changeeCategory(event) {
@@ -108,7 +108,7 @@ export default class changeCategoty extends Component {
           <Col sm={11}>
             <InputGroup className="mb-3">
               <FormControl
-                id="name"
+                id="category"
                 type="text"
                 placeholder="Назвіть категорію"
                 aria-label="Recipient's username"

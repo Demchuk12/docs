@@ -18,6 +18,8 @@ export default class UpdateDocument extends Component {
       isLoaded: false,
       categories: [],
       documentItem: [],
+      status: "",
+      categoryId: "",
       date: null,
       documentName: "",
       show: false,
@@ -35,35 +37,59 @@ export default class UpdateDocument extends Component {
       document.getElementById("name").className = "form-control is-invalid";
     }
   }
-
+  uploadRequest() {
+    fetch(serverUrl + "v1/docs/" + this.state.documentItem.id, {
+      method: "PATCH",
+      body: JSON.stringify({
+        createTime: document.getElementById("date").value + "T15:15:46.001Z",
+        name: document.getElementById("name").value,
+        sectionId: document.getElementById("category").value,
+        status: document.getElementById("status").value,
+      }),
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("accsess_token"),
+        accept: "*/*",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((result) => {});
+  }
   handleSubmit(event) {
-    const indexCategory =
-      document.getElementById("category").options.selectedIndex;
-    const indexStatus = document.getElementById("status").options.selectedIndex;
+    const uploadFile = document.getElementById("uploadFile");
+    const formData = new FormData();
+    formData.append("file", uploadFile.files[0]);
+    console.log(uploadFile.files[0]);
     if (
       document.getElementById("name").value !== "" &&
-      document.getElementById("date").value !== ""
+      document.getElementById("date").value !== "" &&
+      uploadFile.files[0] === undefined
     ) {
-      fetch(serverUrl + "v1/docs/" + this.props.match.params.id, {
-        method: "PATCH",
-        body: JSON.stringify({
-          createTime: document.getElementById("date").value + "T15:15:46.001Z",
-          name: document.getElementById("name").value,
-          sectionId:
-            document.getElementById("category").options[indexCategory].id,
-          status: document.getElementById("status").options[indexStatus].value,
-        }),
+      this.uploadRequest();
+
+      //this.setState({ show: true });
+      //setTimeout(() => this.setState({ show: false }), 4000);
+    }
+
+    if (
+      document.getElementById("name").value !== "" &&
+      document.getElementById("date").value !== "" &&
+      uploadFile.files[0] !== undefined
+    ) {
+      this.uploadRequest();
+      fetch(serverUrl + "v1/docs/" + this.state.documentItem.id, {
+        method: "PUT",
+        body: formData,
         headers: {
           Authorization: "Bearer " + localStorage.getItem("accsess_token"),
           accept: "*/*",
-          "Content-Type": "application/json",
         },
-      })
-        .then((res) => res.json())
-        .then((result) => {});
-
-      this.setState({ show: true });
-      setTimeout(() => this.setState({ show: false }), 4000);
+      }).then(function (res) {
+        if (res.status !== 200) {
+          alert(res.status);
+        } else {
+        }
+      });
     }
 
     event.preventDefault();
@@ -100,6 +126,8 @@ export default class UpdateDocument extends Component {
                   documentItem: result.data,
                   date: result.data.createTime.split("T")[0],
                   documentName: result.data.name,
+                  status: result.data.status,
+                  categoryId: result.data.sectionId,
                 });
               },
               (error) => {
@@ -121,14 +149,30 @@ export default class UpdateDocument extends Component {
   componentDidUpdate() {
     document.getElementById("date").value = this.state.date;
   }
-
+  updateCategory(event) {
+    this.state.categoryId = event.target.value;
+    console.log(document.getElementById("category").value);
+    this.setState({});
+  }
+  updateStatus(event) {
+    this.state.status = event.target.value;
+    this.setState({});
+  }
   time() {
     return this.state.documentItem.createTime.split("T")[0];
   }
 
   render() {
-    const { error, isLoaded, categories, documentItem, show, isEmptyName } =
-      this.state;
+    const {
+      error,
+      isLoaded,
+      categories,
+      documentItem,
+      show,
+      isEmptyName,
+      status,
+      categoryId,
+    } = this.state;
     return (
       <Container>
         <Breadcrumb>
@@ -166,12 +210,21 @@ export default class UpdateDocument extends Component {
           <br />
           <Col sm={6}>
             <Form.Label className="input-left" column lg={2}>
-              Катеогорія
+              Категорія
             </Form.Label>
 
-            <Form.Control id="category" as="select" defaultValue="">
+            <Form.Control
+              id="category"
+              as="select"
+              value={categoryId}
+              onChange={(e) => {
+                this.updateCategory(e);
+              }}
+            >
               {categories.map((categories) => (
-                <option id={categories.id}>{categories.name}</option>
+                <option value={categories.id} id={categories.id}>
+                  {categories.name}
+                </option>
               ))}
             </Form.Control>
           </Col>
@@ -183,7 +236,14 @@ export default class UpdateDocument extends Component {
               Статус
             </Form.Label>
 
-            <Form.Control id="status" as="select">
+            <Form.Control
+              id="status"
+              as="select"
+              value={status}
+              onChange={(e) => {
+                this.updateStatus(e);
+              }}
+            >
               <option value="ACTIVE">Діючий</option>
               <option value="INOPERATIVE">Припинений</option>
               <option value="ARCHIVED">Архівний</option>
@@ -199,6 +259,9 @@ export default class UpdateDocument extends Component {
           </Col>
         </Row>
 
+        <br></br>
+        <Form.Label>Вибрати файл</Form.Label>
+        <Form.Control type="file" id="uploadFile" />
         <br></br>
         <Col xs="auto" className="my-1">
           <Button onClick={(e) => this.handleSubmit(e)} type="submit">

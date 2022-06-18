@@ -57,7 +57,6 @@ export default class Login extends Component {
     if (this.state.password.length === 0) {
     }
     let checkError = false;
-    this.setState({ show: true });
 
     axios
       .post(serverUrl + "v1/auth/login", {
@@ -72,7 +71,9 @@ export default class Login extends Component {
       .catch(function (error) {
         checkError = true;
       });
-    this.setState({ show: checkError });
+    this.state.show = checkError;
+
+    this.setState({});
     event.preventDefault();
   }
 

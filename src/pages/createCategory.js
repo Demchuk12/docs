@@ -78,7 +78,7 @@ export default class createCategory extends Component {
         </Breadcrumb>
         <br></br>
         <Row>
-          <Col sm={4}>
+          <Col sm={12}>
             <h3 className="input-left">Створення категорії </h3>
           </Col>
         </Row>

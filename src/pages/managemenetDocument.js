@@ -177,6 +177,7 @@ export default class managemenetDocument extends Component {
       method: "GET",
       headers: {
         accept: "*/*",
+        Authorization: "Bearer " + localStorage.getItem("accsess_token"),
       },
     })
       .then((res) => res.json())

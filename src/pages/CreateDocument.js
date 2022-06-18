@@ -77,7 +77,6 @@ export default class CreateDocument extends Component {
             if (res.status !== 200) {
               alert(res.status);
             } else {
-              document.getElementById("name").value = "";
             }
           });
         });
